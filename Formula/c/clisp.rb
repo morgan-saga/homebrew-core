@@ -40,9 +40,21 @@ class Clisp < Formula
   uses_from_macos "ncurses"
 
   def install
+    # FIXME: Apple clang 21 miscompiles clisp, making `compile-file` trip an assertion in `c-TEST/TEST-NOT`
+    ENV.append_to_cflags "-fwrapv-pointer" if DevelopmentTools.clang_build_version >= 2100
+
+    # FIXME: the Linux sandbox denies ioctl which causes clisp to use the same fd for stdout and stderr
+    if OS.linux?
+      inreplace Dir["modules/*/configure"], %r{(\$cl_cv_clisp -q -norc -x '[^']*') 2>/dev/null}, "\\1"
+      inreplace "src/clisp-link.in", '${CLISP} -q -x "$*" 2>/dev/null', '${CLISP} -q -x "$*"'
+    end
+
     system "./configure", "--with-readline=yes",
                           "--elispdir=#{elisp}",
                           *std_configure_args
+
+    # Module configures share `config.cache` and race under parallel make
+    ENV.deparallelize
 
     cd "src" do
       system "make"
