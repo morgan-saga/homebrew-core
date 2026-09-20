@@ -1,8 +1,8 @@
 class Iamb < Formula
   desc "Matrix client for Vim addicts"
   homepage "https://iamb.chat"
-  url "https://github.com/ulyssa/iamb/archive/refs/tags/v0.0.11.tar.gz"
-  sha256 "a5cf4f248e0893b5657c5ad1234207c09968018c5462d4063c096f0db459dd7c"
+  url "https://github.com/ulyssa/iamb/archive/refs/tags/v0.0.12.tar.gz"
+  sha256 "54e3e87eece1aff22e9d6bd6798492a1d23ea5e831e9d0889b51272c7d4f6cdb"
   license "Apache-2.0"
 
   bottle do
